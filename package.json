@@ -1,56 +1,59 @@
 {
-  "name": "e-commerce-shop-api-trokhlib",
-  "version": "1.0.0",
-  "description": "project to practice",
-  "main": "src/main.js",
-  "scripts": {
-    "test": "jest"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/dtrokhlib/e-commerce-api.git"
-  },
-  "keywords": [
-    "e-commerce",
-    "api",
-    "nodejs"
-  ],
-  "author": "Dmitriy Trokhlib",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/dtrokhlib/e-commerce-api/issues"
-  },
-  "homepage": "https://github.com/dtrokhlib/e-commerce-api#readme",
-  "dependencies": {
-    "@types/bcryptjs": "^2.4.2",
-    "bcryptjs": "^2.4.3",
-    "body-parser": "^1.19.1",
-    "class-transformer": "^0.5.1",
-    "class-validator": "^0.13.2",
-    "dotenv": "^10.0.0",
-    "express": "^4.17.1",
-    "inversify": "^6.0.1",
-    "jsonwebtoken": "^8.5.1",
-    "reflect-metadata": "^0.1.13",
-    "tslog": "^3.3.0"
-  },
-  "devDependencies": {
-    "@types/express": "^4.17.13",
-    "@types/jest": "^27.0.3",
-    "@types/jsonwebtoken": "^8.5.6",
-    "@types/supertest": "^2.0.11",
-    "@typescript-eslint/eslint-plugin": "^5.7.0",
-    "@typescript-eslint/parser": "^5.7.0",
-    "eslint": "^8.4.1",
-    "eslint-config-prettier": "^8.3.0",
-    "eslint-plugin-prettier": "^4.0.0",
-    "jest": "^27.4.5",
-    "nodemon": "^2.0.15",
-    "prettier": "^2.5.1",
-    "prisma": "^3.6.0",
-    "supertest": "^6.1.6",
-    "ts-jest": "^27.1.2",
-    "ts-node": "^10.4.0",
-    "typescript": "^4.5.4"
-  }
+	"name": "e-commerce-shop-api-trokhlib",
+	"version": "1.0.0",
+	"description": "project to practice",
+	"main": "main.js",
+	"type": "commonjs",
+	"scripts": {
+		"test": "jest",
+		"dev": "nodemon"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/dtrokhlib/e-commerce-api.git"
+	},
+	"keywords": [
+		"e-commerce",
+		"api",
+		"nodejs"
+	],
+	"author": "Dmitriy Trokhlib",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/dtrokhlib/e-commerce-api/issues"
+	},
+	"homepage": "https://github.com/dtrokhlib/e-commerce-api#readme",
+	"dependencies": {
+		"@types/bcryptjs": "^2.4.2",
+		"bcryptjs": "^2.4.3",
+		"body-parser": "^1.19.1",
+		"class-transformer": "^0.5.1",
+		"class-validator": "^0.13.2",
+		"dotenv": "^10.0.0",
+		"express": "^4.17.1",
+		"inversify": "^6.0.1",
+		"jsonwebtoken": "^8.5.1",
+		"mongoose": "^6.1.3",
+		"reflect-metadata": "^0.1.13",
+		"tslog": "^3.3.0"
+	},
+	"devDependencies": {
+		"@types/express": "^4.17.13",
+		"@types/jest": "^27.0.3",
+		"@types/jsonwebtoken": "^8.5.6",
+		"@types/supertest": "^2.0.11",
+		"@typescript-eslint/eslint-plugin": "^5.7.0",
+		"@typescript-eslint/parser": "^5.7.0",
+		"eslint": "^8.4.1",
+		"eslint-config-prettier": "^8.3.0",
+		"eslint-plugin-prettier": "^4.0.0",
+		"jest": "^27.4.5",
+		"nodemon": "^2.0.15",
+		"prettier": "^2.5.1",
+		"prisma": "^3.6.0",
+		"supertest": "^6.1.6",
+		"ts-jest": "^27.1.2",
+		"ts-node": "^10.4.0",
+		"typescript": "^4.5.4"
+	}
 }
