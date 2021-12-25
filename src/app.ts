@@ -1,21 +1,27 @@
+import { json } from 'body-parser';
 import express, { Express } from 'express';
 import { Server } from 'http';
-import { UsersController } from './users/users.controller';
+import { DatabaseController } from './db/mongoose';
+import { UserController } from './users/user.controller';
+import winston from 'winston';
+import expressWinston from 'express-winston';
 
 export class App {
 	app: Express;
 	server: Server;
 	port: number;
-	usersController: UsersController;
+	userController: UserController;
+	databaseController: DatabaseController;
 
-	constructor(usersController: UsersController) {
+	constructor(userController: UserController, databaseController: DatabaseController) {
 		this.app = express();
 		this.port = 3000;
-		this.usersController = usersController;
+		this.userController = userController;
+		this.databaseController = databaseController;
 	}
 
 	useRoutes(): void {
-		this.app.use('/users', this.usersController.router);
+		this.app.use('/users', this.userController.router);
 	}
 
 	useMiddlewares(): void {
@@ -23,7 +29,26 @@ export class App {
 	}
 
 	public async init(): Promise<void> {
+		this.app.use(
+			expressWinston.logger({
+				transports: [new winston.transports.Console()],
+				format: winston.format.combine(
+					winston.format.colorize(),
+					winston.format.timestamp(),
+					winston.format.printf((info) => `${info.timestamp} [${info.level}]: ${info.message}`),
+				),
+				meta: true,
+				msg: 'HTTP {{req.method}} {{req.url}}',
+				expressFormat: true,
+				colorize: true,
+				ignoreRoute: function (req, res) {
+					return false;
+				},
+			}),
+		);
+		this.app.use(json());
 		this.useRoutes();
+		this.databaseController.init();
 		this.server = this.app.listen(this.port);
 		console.log('Server is running on port ' + this.port);
 	}

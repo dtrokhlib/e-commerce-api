@@ -25,6 +25,13 @@
 				"printWidth": 100,
 				"endOfLine": "auto"
 			}
+		],
+		"@typescript-eslint/no-this-alias": [
+			"error",
+			{
+				"allowDestructuring": true, // Disallow `const { props, state } = this`; true by default
+				"allowedNames": ["user"] // Allow `const self = this`; `[]` by default
+			}
 		]
 	}
 }
