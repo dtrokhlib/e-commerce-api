@@ -3,8 +3,7 @@ import express, { Express } from 'express';
 import { Server } from 'http';
 import { DatabaseController } from './db/mongoose';
 import { UserController } from './users/user.controller';
-import winston from 'winston';
-import expressWinston from 'express-winston';
+import { loggerService } from './common/logger.service';
 
 export class App {
 	app: Express;
@@ -29,23 +28,7 @@ export class App {
 	}
 
 	public async init(): Promise<void> {
-		this.app.use(
-			expressWinston.logger({
-				transports: [new winston.transports.Console()],
-				format: winston.format.combine(
-					winston.format.colorize(),
-					winston.format.timestamp(),
-					winston.format.printf((info) => `${info.timestamp} [${info.level}]: ${info.message}`),
-				),
-				meta: true,
-				msg: 'HTTP {{req.method}} {{req.url}}',
-				expressFormat: true,
-				colorize: true,
-				ignoreRoute: function (req, res) {
-					return false;
-				},
-			}),
-		);
+		this.app.use(loggerService);
 		this.app.use(json());
 		this.useRoutes();
 		this.databaseController.init();

@@ -1,14 +1,21 @@
-import mongoose, { ObjectId } from 'mongoose';
+import mongoose, { Model, ObjectId } from 'mongoose';
 
-export interface IUserSchema {
+import { Document } from 'mongoose';
+
+export interface IUserSchema extends Document {
 	username: string;
 	email: string;
 	password?: string;
 	age?: number;
 	avatar?: string;
-	tokens?: string[];
-	createdAt?: string;
-	updatedAt?: string;
-	__v?: number;
-	_id?: ObjectId;
+	tokens?: Object[];
+}
+
+export interface IUserSchemaStatic extends Model<IUserSchema> {
+	comparePasswords(
+		email: string | undefined,
+		username: string | undefined,
+		password: string,
+	): Promise<IUserSchema | null>;
+	updateFields(fields: Object, user: IUserSchema): Promise<IUserSchema>;
 }

@@ -21,8 +21,8 @@ export class UserService implements IUserService {
 		}
 		return newUser;
 	}
-	async update(user: IUserSchema): Promise<IUserSchema> {
-		return testUser;
+	async update(user: IUserSchema): Promise<IUserSchema | null> {
+		return null;
 	}
 	async delete(user: IUserSchema): Promise<boolean> {
 		return true;

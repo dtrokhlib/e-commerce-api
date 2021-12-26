@@ -1,9 +1,10 @@
 import { hash } from 'bcryptjs';
 import { NextFunction } from 'express';
-import mongoose, { model } from 'mongoose';
+import mongoose, { Model, model } from 'mongoose';
 import validator from 'validator';
 import { ConfigService } from '../config/config.service';
-import { IUserSchema } from './interfaces/user.schema.interface';
+import { IUserSchema, IUserSchemaStatic } from './interfaces/user.schema.interface';
+import { compare } from 'bcryptjs';
 
 const userSchema = new mongoose.Schema(
 	{
@@ -61,12 +62,45 @@ const userSchema = new mongoose.Schema(
 	{ timestamps: true },
 );
 
-const configService = new ConfigService();
+userSchema.statics.comparePasswords = async (
+	email: string | undefined,
+	username: string | undefined,
+	password: string,
+): Promise<IUserSchema | null> => {
+	const user = await UserModel.findOne({ $or: [{ username: username }, { email: email }] });
+	if (!user) {
+		return null;
+	}
+	const isMatch = await compare(password, user.password as string);
+	if (!isMatch) {
+		return null;
+	}
+	return user;
+};
+
+userSchema.statics.updateFields = async (
+	fields: Object,
+	user: IUserSchema,
+): Promise<IUserSchema> => {
+	const fieldsKeys = Object.keys(fields);
+	fieldsKeys.forEach((key) => {
+		(user as any)[key] = (fields as any)[key];
+	});
+
+	return user;
+};
 
 userSchema.pre('save', async function (next): Promise<void> {
 	const user = this;
-	user.password = await hash(user.password, Number(configService.get('SALT')));
+	const configService = new ConfigService();
+	if (user.isModified('password')) {
+		user.password = await hash(user.password, Number(configService.get('SALT')));
+	}
+
 	next();
 });
 
-export const UserModel = model<IUserSchema>('User', userSchema);
+export const UserModel: IUserSchemaStatic = model<IUserSchema, IUserSchemaStatic>(
+	'User',
+	userSchema,
+);
