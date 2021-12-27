@@ -1,4 +1,4 @@
-import { NextFunction, Request, Response, Router } from 'express';
+import { NextFunction, Request, Response } from 'express';
 import { connect, model, Schema } from 'mongoose';
 import { doc } from 'prettier';
 import { BaseController } from '../common/base.controller';
