@@ -3,9 +3,9 @@ import { IUserService } from './interfaces/user.service.interface';
 import { UserModel } from './user.schema';
 
 export class UserService implements IUserService {
-	async find(username: string, email: string): Promise<null | IUserSchema> {
+	async find(email: string): Promise<null | IUserSchema> {
 		try {
-			const user = await UserModel.findOne({ $or: [{ username: username }, { email: email }] });
+			const user = await UserModel.findOne({ email: email });
 			if (!user) {
 				return null;
 			}
@@ -28,11 +28,3 @@ export class UserService implements IUserService {
 		return true;
 	}
 }
-
-const testUser = {
-	username: 'Bi11111',
-	email: 'bill@initech.com',
-	password: '12331ADASasd!!',
-	age: 25,
-	avatar: 'https://i.imgur.com/dM7Thhn.png',
-};

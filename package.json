@@ -6,7 +6,7 @@
 	"type": "commonjs",
 	"scripts": {
 		"test": "jest",
-		"dev": "nodemon"
+		"dev": "nodemon --files"
 	},
 	"repository": {
 		"type": "git",
