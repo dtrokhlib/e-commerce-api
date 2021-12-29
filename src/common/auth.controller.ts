@@ -8,7 +8,7 @@ export class AuthController implements IMiddleware {
 	configSerive: IConfigService;
 	userService: IUserService;
 
-	constructor(configService: IConfigService, userService: IUserService) {
+	constructor(userService: IUserService, configService: IConfigService) {
 		this.configSerive = configService;
 		this.userService = userService;
 	}
@@ -17,21 +17,21 @@ export class AuthController implements IMiddleware {
 		try {
 			const token = req.headers.authorization?.split(' ')[1];
 			if (!token) {
-				throw new Error('You need to authorize');
+				return next();
 			}
 			const userEmail = await verify(token, this.configSerive.get('SECRET'));
 			if (!userEmail) {
-				throw new Error('Provided token is not valid');
+				return next();
 			}
 			const user = await this.userService.find((<any>userEmail).email);
 			if (!user) {
-				throw new Error('User is not found');
+				return next();
 			}
 			const isTokenValid = user.tokens?.some((item: any) => {
 				return item.token == token;
 			});
 			if (!isTokenValid) {
-				throw new Error('Token is not valid or expired');
+				return next();
 			}
 			req.user = user;
 			next();

@@ -1,12 +1,11 @@
 import { hash } from 'bcryptjs';
-import { NextFunction } from 'express';
-import mongoose, { Model, model } from 'mongoose';
+import { Schema, model } from 'mongoose';
 import validator from 'validator';
 import { ConfigService } from '../config/config.service';
 import { IUserSchema, IUserSchemaStatic } from './interfaces/user.schema.interface';
 import { compare } from 'bcryptjs';
 
-const userSchema = new mongoose.Schema(
+const userSchema = new Schema(
 	{
 		username: {
 			type: String,
@@ -14,7 +13,7 @@ const userSchema = new mongoose.Schema(
 			required: true,
 			validate(value: string): void | Error {
 				if (value.length < 7 || value.length > 45) {
-					throw new Error('Username should be betweem 7 to 45 symbols');
+					throw new Error('Username should be between 7 to 45 symbols');
 				}
 			},
 		},

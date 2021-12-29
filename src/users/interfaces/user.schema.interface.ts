@@ -1,7 +1,4 @@
-import mongoose, { Model, ObjectId } from 'mongoose';
-
-import { Document } from 'mongoose';
-
+import { Model, Document } from 'mongoose';
 export interface IUserSchema extends Document {
 	username: string;
 	email: string;

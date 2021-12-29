@@ -9,6 +9,7 @@ import { IUserService } from './interfaces/user.service.interface';
 import { UserModel } from './user.schema';
 import { sign } from 'jsonwebtoken';
 import { AuthController } from '../common/auth.controller';
+import { Guard } from '../common/guard.middleware';
 
 export class UserController extends BaseController implements IUserController {
 	userService: IUserService;
@@ -23,25 +24,25 @@ export class UserController extends BaseController implements IUserController {
 				path: '/update',
 				method: 'put',
 				func: this.update,
-				middlewares: [new AuthController(configService, userService)],
+				middlewares: [new Guard()],
 			},
 			{
 				path: '/delete',
 				method: 'delete',
 				func: this.delete,
-				middlewares: [new AuthController(configService, userService)],
+				middlewares: [new Guard()],
 			},
 			{
 				path: '/logout',
 				method: 'post',
 				func: this.logout,
-				middlewares: [new AuthController(configService, userService)],
+				middlewares: [new Guard()],
 			},
 			{
 				path: '/logout/all',
 				method: 'post',
 				func: this.logoutAll,
-				middlewares: [new AuthController(configService, userService)],
+				middlewares: [new Guard()],
 			},
 		]);
 		this.configService = configService;
