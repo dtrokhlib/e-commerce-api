@@ -10,6 +10,8 @@ import { UserModel } from './user.schema';
 import { sign } from 'jsonwebtoken';
 import { AuthController } from '../common/auth.controller';
 import { Guard } from '../common/guard.middleware';
+import sharp from 'sharp';
+import { FileUploadMiddleware } from '../middlewares/file-upload-middleware';
 
 export class UserController extends BaseController implements IUserController {
 	userService: IUserService;
@@ -43,6 +45,12 @@ export class UserController extends BaseController implements IUserController {
 				method: 'post',
 				func: this.logoutAll,
 				middlewares: [new Guard()],
+			},
+			{
+				path: '/upload/profile-image/',
+				method: 'post',
+				func: this.uploadProfileImage,
+				middlewares: [new Guard(), new FileUploadMiddleware()],
 			},
 		]);
 		this.configService = configService;
@@ -115,6 +123,24 @@ export class UserController extends BaseController implements IUserController {
 		req.user.tokens = [];
 		await req.user.save();
 		return res.send(req.user);
+	}
+
+	async uploadProfileImage(
+		req: Request,
+		res: Response,
+		next: NextFunction,
+	): Promise<Response | void> {
+		if (!req.file) {
+			return res.send(req.file);
+		}
+		const buffer = await sharp(req.file.buffer)
+			.resize({ width: 250, height: 250 })
+			.png()
+			.toBuffer();
+		req.user.avatar = buffer;
+		await req.user.save();
+		res.set('Content-Type', 'image/jpg');
+		return res.send(req.user.avatar);
 	}
 
 	async signJWT(email: string): Promise<string> {
