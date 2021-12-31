@@ -16,3 +16,7 @@ export interface IUserSchemaStatic extends Model<IUserSchema> {
 	): Promise<IUserSchema | null>;
 	updateFields(fields: Object, user: IUserSchema): Promise<IUserSchema>;
 }
+
+export interface IUserSchemaMethod extends Model<IUserSchema, IUserSchemaStatic> {
+	toJSON(): IUserSchema;
+}

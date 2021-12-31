@@ -2,8 +2,13 @@ import { hash } from 'bcryptjs';
 import { Schema, model } from 'mongoose';
 import validator from 'validator';
 import { ConfigService } from '../config/config.service';
-import { IUserSchema, IUserSchemaStatic } from './interfaces/user.schema.interface';
+import {
+	IUserSchema,
+	IUserSchemaMethod,
+	IUserSchemaStatic,
+} from './interfaces/user.schema.interface';
 import { compare } from 'bcryptjs';
+import { TaskModel } from '../tasks/task.schema';
 
 const userSchema = new Schema(
 	{
@@ -99,7 +104,23 @@ userSchema.pre('save', async function (next): Promise<void> {
 	next();
 });
 
-export const UserModel: IUserSchemaStatic = model<IUserSchema, IUserSchemaStatic>(
-	'User',
-	userSchema,
-);
+userSchema.pre('remove', async function (next): Promise<void> {
+	const user = this;
+	await TaskModel.deleteMany({ owner: user._id });
+	next();
+});
+
+userSchema.methods.toJSON = function (): IUserSchema {
+	const user = this;
+	const userObject = user.toObject();
+	delete userObject.password;
+	delete userObject.tokens;
+
+	return userObject;
+};
+
+export const UserModel: IUserSchemaStatic = model<
+	IUserSchema,
+	IUserSchemaStatic,
+	IUserSchemaMethod
+>('User', userSchema);

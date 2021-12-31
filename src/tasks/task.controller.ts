@@ -57,7 +57,7 @@ export class TaskController extends BaseController implements ITaskController {
 		if (!req.params.id) {
 			return res.status(400).send({ error: 'ID of task is not specified as parameter' });
 		}
-		const task = await this.taskService.find(req.params.id);
+		const task = await this.taskService.find(req.params.id, req.user._id);
 		if (!task) {
 			return res.status(400).send({ error: 'Task ID is not matching existing one' });
 		}
@@ -87,7 +87,7 @@ export class TaskController extends BaseController implements ITaskController {
 		if (!req.params.id) {
 			return res.status(400).send({ error: 'ID of task is not specified as parameter' });
 		}
-		const currentTask = (await this.taskService.find(req.params.id)) as ITaskSchema;
+		const currentTask = (await this.taskService.find(req.params.id, req.user._id)) as ITaskSchema;
 		if (!currentTask) {
 			return res.status(400).send({ error: 'Task ID is not matching existing one' });
 		}
@@ -99,7 +99,7 @@ export class TaskController extends BaseController implements ITaskController {
 		if (!req.params.id) {
 			return res.status(400).send({ error: 'ID of task is not specified as parameter' });
 		}
-		const task = await this.taskService.delete(req.params.id);
+		const task = await this.taskService.delete(req.params.id, req.user._id);
 		if (!task) {
 			return res.status(400).send({ error: 'Failed to delete this task' });
 		}

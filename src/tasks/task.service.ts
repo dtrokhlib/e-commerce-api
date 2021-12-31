@@ -3,10 +3,11 @@ import { ITaskSchema } from './interfaces/task.schema.interface';
 import { ITaskService } from './interfaces/task.service.interface';
 import { TaskModel } from './task.schema';
 import { ObjectID } from 'bson';
+import { ObjectId } from 'mongodb';
 
 export class TaskService implements ITaskService {
-	async find(_id: string | undefined): Promise<ITaskSchema | ITaskSchema[] | null> {
-		const task = await TaskModel.findById(_id);
+	async find(taskId: string, userId: ObjectID): Promise<ITaskSchema | ITaskSchema[] | null> {
+		const task = await TaskModel.findOne({ _id: new ObjectId(taskId), owner: userId });
 		if (!task) {
 			return null;
 		}
@@ -32,8 +33,8 @@ export class TaskService implements ITaskService {
 		return task;
 	}
 
-	async delete(_id: string): Promise<ITaskSchema | null> {
-		const task = await TaskModel.findByIdAndDelete(_id);
+	async delete(taskId: string, userId: ObjectID): Promise<ITaskSchema | null> {
+		const task = await TaskModel.findOneAndDelete({ _id: new ObjectId(taskId), owner: userId });
 		return task;
 	}
 }
