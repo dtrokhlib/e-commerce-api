@@ -6,6 +6,7 @@ export interface IUserSchema extends Document {
 	age?: number;
 	avatar?: Buffer;
 	tokens?: Object[];
+	role: string;
 }
 
 export interface IUserSchemaStatic extends Model<IUserSchema> {

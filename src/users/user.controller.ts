@@ -12,6 +12,7 @@ import { AuthController } from '../common/auth.controller';
 import { Guard } from '../common/guard.middleware';
 import sharp from 'sharp';
 import { FileUploadMiddleware } from '../middlewares/file-upload-middleware';
+import { PermissionServiceController } from '../permission-service/permission-service.controller';
 
 export class UserController extends BaseController implements IUserController {
 	userService: IUserService;
@@ -32,7 +33,7 @@ export class UserController extends BaseController implements IUserController {
 				path: '/delete',
 				method: 'delete',
 				func: this.delete,
-				middlewares: [new Guard()],
+				middlewares: [new Guard(), new PermissionServiceController(['Admin'])],
 			},
 			{
 				path: '/logout',
