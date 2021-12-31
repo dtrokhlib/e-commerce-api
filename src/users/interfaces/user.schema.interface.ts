@@ -6,7 +6,7 @@ export interface IUserSchema extends Document {
 	age?: number;
 	avatar?: Buffer;
 	tokens?: Object[];
-	role: string;
+	role: 'Editor' | 'Admin' | 'Viewer';
 }
 
 export interface IUserSchemaStatic extends Model<IUserSchema> {
