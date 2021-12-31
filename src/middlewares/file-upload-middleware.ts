@@ -18,7 +18,6 @@ export class FileUploadMiddleware implements IMiddleware {
 						),
 					);
 				}
-				console.log('fileFilter');
 				cb(null, true);
 			},
 		});

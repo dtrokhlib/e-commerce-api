@@ -47,6 +47,12 @@ export class UserController extends BaseController implements IUserController {
 				middlewares: [new Guard()],
 			},
 			{
+				path: '/view/profile/:id',
+				method: 'get',
+				func: this.viewProfile,
+				middlewares: [],
+			},
+			{
 				path: '/upload/profile-image/',
 				method: 'post',
 				func: this.uploadProfileImage,
@@ -125,22 +131,27 @@ export class UserController extends BaseController implements IUserController {
 		return res.send(req.user);
 	}
 
+	async viewProfile(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
+		const user = await UserModel.findById(req.params.id);
+		if (!user || !user.avatar) {
+			return res.status(400).send({ error: 'User does not exist or avatar is not set' });
+		}
+		res.set('Content-Type', 'image/jpg');
+		res.send(user.avatar);
+	}
+
 	async uploadProfileImage(
 		req: Request,
 		res: Response,
 		next: NextFunction,
 	): Promise<Response | void> {
-		if (!req.file) {
-			return res.send(req.file);
+		if (!req.file?.buffer) {
+			return res.status(400).send({ error: 'Image not attached to request' });
 		}
-		const buffer = await sharp(req.file.buffer)
-			.resize({ width: 250, height: 250 })
-			.png()
-			.toBuffer();
+		const buffer = await sharp(req.file.buffer).toBuffer();
 		req.user.avatar = buffer;
 		await req.user.save();
-		res.set('Content-Type', 'image/jpg');
-		return res.send(req.user.avatar);
+		return res.status(200).send('Done');
 	}
 
 	async signJWT(email: string): Promise<string> {

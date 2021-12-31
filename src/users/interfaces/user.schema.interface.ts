@@ -4,7 +4,7 @@ export interface IUserSchema extends Document {
 	email: string;
 	password?: string;
 	age?: number;
-	avatar?: string;
+	avatar?: Buffer;
 	tokens?: Object[];
 }
 
