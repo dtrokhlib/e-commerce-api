@@ -1,12 +1,12 @@
-import { Model } from 'mongoose';
+import { Model, Document } from 'mongoose';
 
-export interface IProductSchema {
+export interface IProductSchema extends Document {
 	product: {
 		name: string;
 		details: string;
-		images: string[];
 		description: any;
-		peculiarities: string[];
+		peculiarities: [peculiaritie: { name: string; description: string }];
+		images: [{ image: { url: string; imageName: string } }];
 	};
 	price: {
 		init: number;
