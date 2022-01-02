@@ -1,5 +1,10 @@
-import { Schema } from 'mongoose';
+import { model, Schema } from 'mongoose';
 import Profanity from 'profanity-js';
+import {
+	IProductSchema,
+	IProductMethods,
+	IProductStatic,
+} from './interfaces/product.schema.interface';
 
 // Profanity instance setup
 const profanity = new Profanity();
@@ -129,4 +134,9 @@ const ProductScheme = new Schema(
 		},
 	},
 	{ timestamps: true },
+);
+
+export const ProductModel = model<IProductSchema, IProductMethods, IProductStatic>(
+	'Product',
+	ProductScheme,
 );

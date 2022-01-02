@@ -6,6 +6,7 @@ import { UserController } from './users/user.controller';
 import { loggerService } from './common/logger.service';
 import { TaskController } from './tasks/task.controller';
 import { AuthController } from './common/auth.controller';
+import { ProductController } from './products/product.controller';
 
 export class App {
 	app: Express;
@@ -13,12 +14,14 @@ export class App {
 	port: number;
 	userController: UserController;
 	taskController: TaskController;
+	productController: ProductController;
 	authController: AuthController;
 	databaseController: DatabaseController;
 
 	constructor(
 		userController: UserController,
 		taskController: TaskController,
+		productController: ProductController,
 		authController: AuthController,
 		databaseController: DatabaseController,
 	) {
@@ -26,6 +29,7 @@ export class App {
 		this.port = 3000;
 		this.userController = userController;
 		this.taskController = taskController;
+		this.productController = productController;
 		this.authController = authController;
 		this.databaseController = databaseController;
 	}
@@ -33,6 +37,7 @@ export class App {
 	useRoutes(): void {
 		this.app.use('/users', this.userController.router);
 		this.app.use('/tasks', this.taskController.router);
+		this.app.use('/products', this.productController.router);
 	}
 
 	useMiddlewares(): void {
