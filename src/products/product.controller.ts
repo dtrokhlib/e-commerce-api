@@ -1,4 +1,5 @@
 import { NextFunction, Response, Request } from 'express';
+import { ObjectId } from 'mongodb';
 import { BaseController } from '../common/base.controller';
 import { Guard } from '../common/guard.middleware';
 import { IConfigService } from '../config/interfaces/config.service.interface';
@@ -17,7 +18,7 @@ export class ProductController extends BaseController implements IProductControl
 		super();
 		this.bindRoutes([
 			{
-				path: '/view/*',
+				path: '/view/:id',
 				method: 'get',
 				func: this.viewOne,
 				middlewares: [],
@@ -52,23 +53,48 @@ export class ProductController extends BaseController implements IProductControl
 	}
 
 	async viewOne(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-		return res.send();
+		const product = await this.productService.findOne(new ObjectId(req.params.id));
+		if (!product) {
+			return res
+				.status(400)
+				.send({ error: `Was not able to fetch product by id ${req.params.id}` });
+		}
+		return res.send(product);
 	}
 
 	async view(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-		return res.send();
+		const product = await this.productService.find(req.query);
+		if (!product) {
+			return res.status(400).send({ error: `Was not able to GET product by id ${req.params.id}` });
+		}
+		return res.send(product);
 	}
 
 	async create(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
 		const product = await this.productService.create(req.body);
+		if (!product) {
+			return res.status(400).send({ error: 'Validation failure.' });
+		}
 		return res.send(product);
 	}
 
 	async update(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-		return res.send();
+		const product = await this.productService.update(new ObjectId(req.params.id), req.body);
+		if (!product) {
+			return res
+				.status(400)
+				.send({ error: `Was not able to UPDATE product by id ${req.params.id}` });
+		}
+		return res.send(product);
 	}
 
 	async delete(req: Request, res: Response, next: NextFunction): Promise<Response | void> {
-		return res.send();
+		const product = await this.productService.delete(new ObjectId(req.params.id));
+		if (!product) {
+			return res
+				.status(400)
+				.send({ error: `Was not able to DELETE product by id ${req.params.id}` });
+		}
+		return res.send(product);
 	}
 }
